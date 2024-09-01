@@ -1,5 +1,21 @@
-import {createSlice, PayloadAction} from '@reduxjs/toolkit'
+import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit'
 import {RootState} from "../../App/store";
+
+export type authorizationData = {
+    email: string,
+    password: string,
+}
+
+export const userAuthorize = createAsyncThunk(
+    'user/authorize',
+    async (amount: authorizationData) => {
+        const response = () => {
+            return {status: 'success'};
+        }
+        // The value we return becomes the `fulfilled` action payload
+        return response
+    }
+)
 
 export const userSlice = createSlice({
     name: 'user',
@@ -10,6 +26,18 @@ export const userSlice = createSlice({
         setName: (state, action: PayloadAction<string>) => {
             state.name = action.payload;
         },
+    },
+    extraReducers: builder => {
+        builder
+            .addCase(userAuthorize.pending, (state, action) => {
+                console.log('userAuthorize.pending', action)
+            })
+            .addCase(userAuthorize.fulfilled, (state, action) => {
+                console.log('userAuthorize.fulfilled', action)
+            })
+            .addCase(userAuthorize.rejected, (state, action) => {
+                console.log('userAuthorize.rejected', action)
+            })
     }
 })
 

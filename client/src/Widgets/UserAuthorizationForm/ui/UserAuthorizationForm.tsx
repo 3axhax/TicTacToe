@@ -1,14 +1,13 @@
 import React, {useState} from 'react';
 import {useAppDispatch} from "../../../Shared/storeHooks";
-import {setName} from "../../../Entities/User/UserSlice";
+import {authorizationData, setName, userAuthorize} from "../../../Entities/User/UserSlice";
 
-type authorizationForm = {
-    userName: string,
-}
+
 const UserAuthorizationForm: React.FC = () => {
 
-    const [formData, setFormData] = useState<authorizationForm>({
-        userName: '',
+    const [formData, setFormData] = useState<authorizationData>({
+        email: '',
+        password: '',
     })
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -20,7 +19,8 @@ const UserAuthorizationForm: React.FC = () => {
 
     const onSubmitForm = (e: React.ChangeEvent<HTMLFormElement>) => {
         e.preventDefault()
-        dispatch(setName(formData.userName));
+        dispatch(setName(formData.email));
+        dispatch(userAuthorize(formData));
     }
 
     return (
@@ -29,14 +29,14 @@ const UserAuthorizationForm: React.FC = () => {
                 <label htmlFor="email">Email</label>
                 <input
                     type="email"
-                    name="userName"
+                    name="email"
                     id="email"
                     onChange={handleChange}
                 />
             </div>
             <div>
                 <label htmlFor="password">Password</label>
-                <input type="password" id="password"/>
+                <input type="password" name="password" id="password"/>
             </div>
             <button type="submit">Send</button>
         </form>

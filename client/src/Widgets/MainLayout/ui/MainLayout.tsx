@@ -1,5 +1,6 @@
 import React from 'react';
 import {Link, Outlet} from "react-router-dom";
+import {UserMenu} from "../../UserMenu";
 
 const MainLayout: React.FC = () => {
     return (
@@ -14,7 +15,7 @@ const MainLayout: React.FC = () => {
                     </li>
                 </ul>
             </nav>
-
+            <UserMenu/>
             <hr/>
             <Outlet/>
         </div>

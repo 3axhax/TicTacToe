@@ -1,5 +1,6 @@
 import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit'
 import {RootState} from "../../App/store";
+import Request from "../../Shared/API/Request";
 
 export type authorizationData = {
     email: string,
@@ -8,12 +9,11 @@ export type authorizationData = {
 
 export const userAuthorize = createAsyncThunk(
     'user/authorize',
-    async (amount: authorizationData) => {
-        const response = () => {
-            return {status: 'success'};
-        }
+    async (userData: authorizationData) => {
+        const response = await Request.post('/auth/login', userData);
         // The value we return becomes the `fulfilled` action payload
-        return response
+        console.log(response);
+        return response;
     }
 )
 

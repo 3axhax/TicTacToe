@@ -36,7 +36,7 @@ const UserAuthorizationForm: React.FC = () => {
             </div>
             <div>
                 <label htmlFor="password">Password</label>
-                <input type="password" name="password" id="password"/>
+                <input type="password" name="password" id="password" onChange={handleChange}/>
             </div>
             <button type="submit">Send</button>
         </form>

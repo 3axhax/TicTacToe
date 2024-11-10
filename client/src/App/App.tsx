@@ -3,7 +3,7 @@ import {Route, Routes} from "react-router-dom";
 import {HomePage} from "../Pages/HomePage";
 import {AuthPage} from "../Pages/AuthPage";
 import {NotFoundPage} from "../Pages/404";
-import {MainLayout} from "../Widgets/MainLayout";
+import {MainLayout} from "./MainLayout";
 
 function App() {
     return (

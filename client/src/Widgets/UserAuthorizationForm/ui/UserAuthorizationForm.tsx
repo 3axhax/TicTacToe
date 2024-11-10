@@ -1,6 +1,11 @@
 import React, {useState} from 'react';
-import {useAppDispatch} from "../../../Shared/storeHooks";
-import {authorizationData, setName, userAuthorize} from "../../../Entities/User/UserSlice";
+import {useAppDispatch, useAppSelector} from "../../../Shared/storeHooks";
+import {
+    authorizationData, selectErrorAuthorize,
+    selectPendingAuthorize,
+    setName,
+    userAuthorize
+} from "../../../Entities/User/UserSlice";
 
 
 const UserAuthorizationForm: React.FC = () => {
@@ -17,6 +22,9 @@ const UserAuthorizationForm: React.FC = () => {
 
     const dispatch = useAppDispatch();
 
+    const pending = useAppSelector(selectPendingAuthorize)
+    const error = useAppSelector(selectErrorAuthorize)
+
     const onSubmitForm = (e: React.ChangeEvent<HTMLFormElement>) => {
         e.preventDefault()
         dispatch(setName(formData.email));
@@ -24,8 +32,8 @@ const UserAuthorizationForm: React.FC = () => {
     }
 
     return (
-        <form noValidate onSubmit={onSubmitForm}>
-            <div>
+        <form className={'form__authorization'} onSubmit={onSubmitForm}>
+            <div className={'input__row'}>
                 <label htmlFor="email">Email</label>
                 <input
                     type="email"
@@ -34,11 +42,21 @@ const UserAuthorizationForm: React.FC = () => {
                     onChange={handleChange}
                 />
             </div>
-            <div>
+            <div className={'input__row'}>
                 <label htmlFor="password">Password</label>
-                <input type="password" name="password" id="password" onChange={handleChange}/>
+                <input
+                    type="password"
+                    name="password"
+                    id="password"
+                    onChange={handleChange}/>
             </div>
-            <button type="submit">Send</button>
+            <button type="submit">{pending ? 'Sending...' : 'Send'}</button>
+            {error ?
+                <div className={'form__error'}>
+                    {error}
+                </div>
+                : null
+            }
         </form>
     )
 }

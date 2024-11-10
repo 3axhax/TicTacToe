@@ -5,7 +5,7 @@ type method = 'GET' | 'POST' | 'PUT' | 'DELETE';
 
 class Request {
     transport: transport = 'axios';
-    method:method = 'GET';
+    method: method = 'GET';
     target: string = '';
     baseUrl: string = 'http://localhost:5050';
     data: {} = {};
@@ -39,7 +39,7 @@ class Request {
         return this._send();
     }
 
-    post = (url:string = '', data: {} = {}) => {
+    post = (url:string = '', data: {} = {}): Promise<any> => {
         this.method = 'POST'
         this._setTarget(url);
         this.data = data;

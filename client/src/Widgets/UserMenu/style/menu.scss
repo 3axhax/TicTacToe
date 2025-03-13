@@ -1,0 +1,20 @@
+.user_menu {
+  cursor: pointer;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: center;
+  position: relative;
+}
+.user_menu__action_list {
+  position: absolute;
+  top: 40px;
+  width: 100%;
+  & ul {
+    list-style: none;
+    background-color: $color-white;
+    border: solid 1px $color-black;
+    border-radius: 5px;
+    margin: 0;
+    padding: 5px 10px;
+  }
+}

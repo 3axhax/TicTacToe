@@ -1,8 +1,13 @@
 import React from 'react';
 import {NavLink, Outlet} from "react-router-dom";
 import {UserMenu} from "../../../Widgets/UserMenu";
+import {useAppSelector} from "../../../Shared/storeHooks";
+import {selectIsUserAuthorized} from "../../../Entities/User/UserSlice";
 
 const MainLayout: React.FC = () => {
+
+    const isUserAuthorized = useAppSelector(selectIsUserAuthorized)
+
     return (
         <>
             <div className={'header__content'}>
@@ -11,9 +16,10 @@ const MainLayout: React.FC = () => {
                         <li>
                             <NavLink to="/">Home</NavLink>
                         </li>
+                        {!isUserAuthorized &&
                         <li>
                             <NavLink to="/auth">Auth</NavLink>
-                        </li>
+                        </li>}
                     </ul>
                 </nav>
                 <UserMenu/>

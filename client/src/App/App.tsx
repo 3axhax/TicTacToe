@@ -4,8 +4,13 @@ import {HomePage} from "../Pages/HomePage";
 import {AuthPage} from "../Pages/AuthPage";
 import {NotFoundPage} from "../Pages/404";
 import {MainLayout} from "./MainLayout";
+import {useAppDispatch} from "../Shared/storeHooks";
+import {checkLSUser} from "../Entities/User/UserSlice";
 
 function App() {
+    useAppDispatch()(checkLSUser());
+
+
     return (
         <Routes>
             <Route path="/" element={<MainLayout/>}>

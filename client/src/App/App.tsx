@@ -6,6 +6,7 @@ import {NotFoundPage} from "../Pages/404";
 import {MainLayout} from "./MainLayout";
 import {useAppDispatch, useAppSelector} from "../Shared/storeHooks";
 import {checkLSUser, selectIsUserAuthorized} from "../Entities/User/UserSlice";
+import {RegistrationPage} from "../Pages/RegistrationPage";
 
 function App() {
 
@@ -26,6 +27,7 @@ function App() {
                     :
                     <>
                         <Route path="/auth" element={<AuthPage/>}/>
+                        <Route path="/registration" element={<RegistrationPage/>}/>
                     </>
                 }
                 <Route path="*" element={<NotFoundPage/>}></Route>

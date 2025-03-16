@@ -32,11 +32,16 @@ export class AuthService {
       throw new HttpException("This user exist", HttpStatus.BAD_REQUEST);
     }
     const hashPassword = await bcrypt.hash(userDto.password, 5);
-    const user = this.userService.createUser({
+    const user = await this.userService.createUser({
       ...userDto,
+      name: userDto.name ?? userDto.email,
       password: hashPassword,
     });
-    return this.generateToken(await user);
+    const token = await this.generateToken(user);
+    return {
+      ...token,
+      name: user.name,
+    };
   }
 
   private async generateToken(user: User) {

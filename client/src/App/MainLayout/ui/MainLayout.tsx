@@ -16,10 +16,18 @@ const MainLayout: React.FC = () => {
                         <li>
                             <NavLink to="/">Home</NavLink>
                         </li>
-                        {!isUserAuthorized &&
-                        <li>
-                            <NavLink to="/auth">Auth</NavLink>
-                        </li>}
+                        {isUserAuthorized ?
+                            <></>
+                            :
+                            <>
+                                <li>
+                                    <NavLink to="/auth">Login</NavLink>
+                                </li>
+                                <li>
+                                    <NavLink to="/registration">Registration</NavLink>
+                                </li>
+                            </>
+                        }
                     </ul>
                 </nav>
                 <UserMenu/>

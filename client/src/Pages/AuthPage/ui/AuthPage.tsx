@@ -5,7 +5,7 @@ const AuthPage: React.FC = () => {
 
     return (
         <>
-            <h1>Auth Page</h1>
+            <h1>Login</h1>
             <UserAuthorizationForm/>
         </>
     )

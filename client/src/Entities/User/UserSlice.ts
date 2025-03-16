@@ -1,38 +1,52 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { Action, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { RootState } from "../../App/store";
 import Request from "../../Shared/API/Request";
-import { AxiosError } from "axios";
 import { USER_LS_KEY } from "./UserConstants";
+import {
+  UserAuthorizationType,
+  userRegistrationType,
+} from "./dto/UserSlice.dto";
+import { HandlerAxiosError } from "../../Shared/Helpers/RequestHandlersError";
 
-export type authorizationData = {
-  email: string;
-  password: string;
-};
-
-export const userAuthorize = createAsyncThunk(
-  "user/authorize",
-  async (userData: authorizationData) => {
-    try {
-      const response = await Request.post("/auth/login", userData);
-      return response.data;
-    } catch (e) {
-      if (typeof e === "string") {
-        throw new Error(e.toUpperCase());
-      } else if (e instanceof AxiosError) {
-        throw new Error(e?.response?.data.message);
-      } else if (e instanceof Error) {
-        throw new Error(e.message);
-      }
-    }
-  },
-);
-
+interface ActionType extends Action {
+  error: { message: string };
+}
 export const updateUserLocalStorage = (key: string, value: string) => {
   const ls = localStorage.getItem(USER_LS_KEY);
   const user = ls ? JSON.parse(ls) : {};
   user[key] = value;
   localStorage.setItem(USER_LS_KEY, JSON.stringify(user));
 };
+
+export const userAuthorize = createAsyncThunk(
+  "user/authorize",
+  async (userData: UserAuthorizationType) => {
+    try {
+      const response = await Request.post("/auth/login", userData);
+      return response.data;
+    } catch (e) {
+      HandlerAxiosError(e);
+    }
+  },
+);
+
+export const userRegistration = createAsyncThunk(
+  "user/registration",
+  async (userData: userRegistrationType) => {
+    if (!userData.password) {
+      throw new Error("Empty password");
+    }
+    if (userData.password !== userData.confirmPassword) {
+      throw new Error("Incorrect Confirm Password");
+    }
+    try {
+      const response = await Request.post("/auth/registration", userData);
+      return response.data;
+    } catch (e) {
+      HandlerAxiosError(e);
+    }
+  },
+);
 
 export const userSlice = createSlice({
   name: "user",
@@ -58,13 +72,12 @@ export const userSlice = createSlice({
         }
       }
     },
+    resetUserError: (state) => {
+      state.error = "";
+    },
   },
   extraReducers: (builder) => {
     builder
-      .addCase(userAuthorize.pending, (state) => {
-        state.pending = true;
-        state.error = "";
-      })
       .addCase(userAuthorize.fulfilled, (state, action) => {
         if (action.payload.token) {
           state.token = action.payload.token;
@@ -74,14 +87,33 @@ export const userSlice = createSlice({
         }
         state.pending = false;
       })
-      .addCase(userAuthorize.rejected, (state, action) => {
+      .addCase(userRegistration.fulfilled, (state, action) => {
+        if (action.payload.token) {
+          state.token = action.payload.token;
+          updateUserLocalStorage("token", state.token);
+          state.name = action.payload.name;
+          updateUserLocalStorage("name", state.name);
+        }
         state.pending = false;
-        state.error = action.error.message ? action.error.message : "";
-      });
+      })
+      .addMatcher(
+        (action) => action.type.endsWith("/rejected"),
+        (state, action: ActionType) => {
+          state.pending = false;
+          state.error = action.error.message ? action.error.message : "";
+        },
+      )
+      .addMatcher(
+        (action) => action.type.endsWith("/pending"),
+        (state) => {
+          state.pending = true;
+          state.error = "";
+        },
+      );
   },
 });
 
-export const { logoutUser, checkLSUser } = userSlice.actions;
+export const { logoutUser, checkLSUser, resetUserError } = userSlice.actions;
 
 export const selectUserName = (state: RootState) => state.user.name;
 export const selectUserToken = (state: RootState) => state.user.token;

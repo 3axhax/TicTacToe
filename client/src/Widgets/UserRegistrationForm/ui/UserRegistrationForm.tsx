@@ -1,25 +1,27 @@
-import React, {ChangeEvent, FC, useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useAppDispatch, useAppSelector} from "../../../Shared/storeHooks";
 import {
     resetUserError,
     selectErrorAuthorize,
     selectPendingAuthorize,
-    userAuthorize
+    userRegistration
 } from "../../../Entities/User/UserSlice";
-import styles from '../UserAuthorizationForm.module.scss'
+import styles from '../UserRegistrationForm.module.scss'
 import {useNavigate} from "react-router-dom";
-import {UserAuthorizationType} from "../../../Entities/User/dto/UserSlice.dto";
+import {userRegistrationType} from "../../../Entities/User/dto/UserSlice.dto";
 import {InputRow} from "../../../Shared/ui/InputRow/InputRow";
 
 
-const UserAuthorizationForm: FC = () => {
+const UserRegistrationForm: React.FC = () => {
 
-    const [formData, setFormData] = useState<UserAuthorizationType>({
+    const [formData, setFormData] = useState<userRegistrationType>({
+        name: '',
         email: '',
         password: '',
+        confirmPassword: ''
     })
 
-    const handleChange = (e: ChangeEvent<HTMLInputElement>): void => {
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const {name, value} = e.target;
         setFormData(prevData => ({...prevData, [name]: value}))
     }
@@ -37,16 +39,18 @@ const UserAuthorizationForm: FC = () => {
 
     const onSubmitForm = (e: React.ChangeEvent<HTMLFormElement>) => {
         e.preventDefault()
-        dispatch(userAuthorize(formData)).then((arg) => {
+        dispatch(userRegistration(formData)).then((arg) => {
             if(arg.payload) navigate("/");
         });
     }
 
     return (
         <form className={styles.form} onSubmit={onSubmitForm}>
+            <InputRow name={'name'} label={'Name'} onChange={handleChange}/>
             <InputRow type={'email'} name={'email'} label={'Email'} onChange={handleChange}/>
-            <InputRow type={'password'} name={'password'} label={'Password'} onChange={handleChange} autoComplete="on"/>
-            <button type="submit">{pending ? 'Sending...' : 'Login'}</button>
+            <InputRow type={'password'} name={'password'} label={'Password'} onChange={handleChange} autoComplete='off'/>
+            <InputRow type={'password'} name={'confirmPassword'} label={'Confirm Password'} onChange={handleChange} autoComplete='off'/>
+            <button type="submit">{pending ? 'Sending...' : 'Register'}</button>
             {error ?
                 <div className={styles.error}>
                     {error}
@@ -57,4 +61,4 @@ const UserAuthorizationForm: FC = () => {
     )
 }
 
-export default UserAuthorizationForm
+export default UserRegistrationForm

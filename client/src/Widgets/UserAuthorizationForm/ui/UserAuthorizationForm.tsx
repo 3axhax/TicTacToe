@@ -3,9 +3,9 @@ import {useAppDispatch, useAppSelector} from "../../../Shared/storeHooks";
 import {
     authorizationData, selectErrorAuthorize,
     selectPendingAuthorize,
-    setName,
     userAuthorize
 } from "../../../Entities/User/UserSlice";
+import styles from '../UserAuthorizationForm.module.scss'
 
 
 const UserAuthorizationForm: React.FC = () => {
@@ -27,13 +27,12 @@ const UserAuthorizationForm: React.FC = () => {
 
     const onSubmitForm = (e: React.ChangeEvent<HTMLFormElement>) => {
         e.preventDefault()
-        dispatch(setName(formData.email));
         dispatch(userAuthorize(formData));
     }
 
     return (
-        <form className={'form__authorization'} onSubmit={onSubmitForm}>
-            <div className={'input__row'}>
+        <form className={styles.form} onSubmit={onSubmitForm}>
+            <div className={styles.row}>
                 <label htmlFor="email">Email</label>
                 <input
                     type="email"
@@ -42,7 +41,7 @@ const UserAuthorizationForm: React.FC = () => {
                     onChange={handleChange}
                 />
             </div>
-            <div className={'input__row'}>
+            <div className={styles.row}>
                 <label htmlFor="password">Password</label>
                 <input
                     type="password"
@@ -52,7 +51,7 @@ const UserAuthorizationForm: React.FC = () => {
             </div>
             <button type="submit">{pending ? 'Sending...' : 'Send'}</button>
             {error ?
-                <div className={'form__error'}>
+                <div className={styles.error}>
                     {error}
                 </div>
                 : null

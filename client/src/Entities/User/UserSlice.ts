@@ -1,4 +1,4 @@
-import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit'
+import {createAsyncThunk, createSlice} from '@reduxjs/toolkit'
 import {RootState} from "../../App/store";
 import Request from "../../Shared/API/Request";
 import {AxiosError} from "axios";
@@ -44,10 +44,6 @@ export const userSlice = createSlice({
         error: '',
     },
     reducers: {
-        setName: (state, action: PayloadAction<string>) => {
-            state.name = action.payload;
-            updateUserLocalStorage('name', state.name);
-        },
         logoutUser: (state) => {
             state.name = ''
             state.token = ''
@@ -75,6 +71,8 @@ export const userSlice = createSlice({
                 if (action.payload.token) {
                     state.token = action.payload.token;
                     updateUserLocalStorage('token', state.token);
+                    state.name = action.payload.name;
+                    updateUserLocalStorage('name', state.name);
                 }
                 state.pending = false;
             })
@@ -85,7 +83,7 @@ export const userSlice = createSlice({
     }
 })
 
-export const {setName, logoutUser, checkLSUser} = userSlice.actions
+export const {logoutUser, checkLSUser} = userSlice.actions
 
 export const selectUserName = (state: RootState) => state.user.name;
 export const selectUserToken = (state: RootState) => state.user.token;

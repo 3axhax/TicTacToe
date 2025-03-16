@@ -1,4 +1,4 @@
-import MainLayout from "./ui/MainLayout"
-import './index.scss'
+import MainLayout from "./ui/MainLayout";
+import "./index.scss";
 
-export {MainLayout}
+export { MainLayout };

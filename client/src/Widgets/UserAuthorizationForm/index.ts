@@ -1,4 +1,4 @@
-import UserAuthorizationForm from "./ui/UserAuthorizationForm"
-import './UserAuthorizationForm.module.scss';
+import UserAuthorizationForm from "./ui/UserAuthorizationForm";
+import "./UserAuthorizationForm.module.scss";
 
-export {UserAuthorizationForm}
+export { UserAuthorizationForm };

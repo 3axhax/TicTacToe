@@ -6,6 +6,7 @@ import {
     userAuthorize
 } from "../../../Entities/User/UserSlice";
 import styles from '../UserAuthorizationForm.module.scss'
+import {useNavigate} from "react-router-dom";
 
 
 const UserAuthorizationForm: React.FC = () => {
@@ -25,9 +26,13 @@ const UserAuthorizationForm: React.FC = () => {
     const pending = useAppSelector(selectPendingAuthorize)
     const error = useAppSelector(selectErrorAuthorize)
 
+    const navigate = useNavigate();
+
     const onSubmitForm = (e: React.ChangeEvent<HTMLFormElement>) => {
         e.preventDefault()
-        dispatch(userAuthorize(formData));
+        dispatch(userAuthorize(formData)).then((arg) => {
+            if(arg.payload) navigate("/");
+        });
     }
 
     return (
@@ -47,6 +52,7 @@ const UserAuthorizationForm: React.FC = () => {
                     type="password"
                     name="password"
                     id="password"
+                    autoComplete="on"
                     onChange={handleChange}/>
             </div>
             <button type="submit">{pending ? 'Sending...' : 'Send'}</button>

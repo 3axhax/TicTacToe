@@ -1,21 +1,33 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {Route, Routes} from "react-router-dom";
 import {HomePage} from "../Pages/HomePage";
 import {AuthPage} from "../Pages/AuthPage";
 import {NotFoundPage} from "../Pages/404";
 import {MainLayout} from "./MainLayout";
-import {useAppDispatch} from "../Shared/storeHooks";
-import {checkLSUser} from "../Entities/User/UserSlice";
+import {useAppDispatch, useAppSelector} from "../Shared/storeHooks";
+import {checkLSUser, selectIsUserAuthorized} from "../Entities/User/UserSlice";
 
 function App() {
-    useAppDispatch()(checkLSUser());
 
+    const dispatch = useAppDispatch();
+
+    useEffect(() => {
+        dispatch(checkLSUser());
+    }, []);
+
+    const isUserAuthorized = useAppSelector(selectIsUserAuthorized)
 
     return (
         <Routes>
             <Route path="/" element={<MainLayout/>}>
                 <Route index element={<HomePage/>}/>
-                <Route path="/auth" element={<AuthPage/>}/>
+                {isUserAuthorized ?
+                    <></>
+                    :
+                    <>
+                        <Route path="/auth" element={<AuthPage/>}/>
+                    </>
+                }
                 <Route path="*" element={<NotFoundPage/>}></Route>
             </Route>
         </Routes>

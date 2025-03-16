@@ -1,3 +1,3 @@
-import NotFoundPage from "./ui/404"
+import NotFoundPage from "./ui/404";
 
-export {NotFoundPage}
+export { NotFoundPage };

@@ -8,16 +8,17 @@ import {
   WebSocketServer,
   ConnectedSocket,
 } from "@nestjs/websockets";
-import { WebSocketService } from "./web-socket.service";
+import { GameWebsocketService } from "./GameWebsocket.service";
 import { Server, Socket } from "socket.io";
 
-@WebSocketGateway()
-export class WebsocketGateway
+@WebSocketGateway({
+  namespace: "game",
+})
+export class GameWebsocketGateway
   implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
 {
-  constructor(private readonly webSocketService: WebSocketService) {}
-
   @WebSocketServer() server: Server;
+  constructor(private readonly webSocketService: GameWebsocketService) {}
 
   @SubscribeMessage("findAllWebSocket")
   findAll(@MessageBody() data: any, @ConnectedSocket() client: Socket) {
@@ -29,18 +30,28 @@ export class WebsocketGateway
   @SubscribeMessage("test")
   async test(@MessageBody() data: any, @ConnectedSocket() client: any) {
     this.server.in("Best").emit("message", "You are the best!!!");
+    this.server.emit("test", "test message");
     return "test";
   }
 
+  @SubscribeMessage("onlineUsersCount")
+  async getOnlineUsersCount() {
+    await this.webSocketService.getOnlineUsersCount();
+  }
+
   afterInit(): void {
-    console.log("WebSocketGateway Init!");
+    console.log("WebSocketGateway Init!", this.server);
+    this.webSocketService.server = this.server;
   }
 
-  handleConnection(client: Socket, ...args: any): void {
+  async handleConnection(client: Socket, ...args: any): Promise<void> {
+    client.join("Game");
     console.log("WS connection: ", client.id, args);
+    await this.webSocketService.getOnlineUsersCount();
   }
 
-  handleDisconnect(client: Socket): void {
+  async handleDisconnect(client: Socket): Promise<void> {
     console.log("WS disconnection: ", client.id);
+    await this.webSocketService.getOnlineUsersCount();
   }
 }

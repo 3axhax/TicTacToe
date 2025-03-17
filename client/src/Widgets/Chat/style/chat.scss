@@ -1,0 +1,13 @@
+.block {
+  height: 100%;
+}
+.messageList {
+  border: solid 1px $color-black;
+  border-radius: 10px;
+  height: calc(70% - 2px);
+}
+.inputMessage {
+  border: solid 1px $color-black;
+  border-radius: 10px;
+  height: calc(30% - 2px);
+}

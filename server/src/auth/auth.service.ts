@@ -31,10 +31,15 @@ export class AuthService {
     if (candidate) {
       throw new HttpException("This user exist", HttpStatus.BAD_REQUEST);
     }
+
+    console.log(userDto);
+    console.log("name", userDto.name ? userDto.name : userDto.email);
+    console.log("name bool", !!userDto.name);
+
     const hashPassword = await bcrypt.hash(userDto.password, 5);
     const user = await this.userService.createUser({
       ...userDto,
-      name: userDto.name ?? userDto.email,
+      name: userDto.name ? userDto.name : userDto.email,
       password: hashPassword,
     });
     const token = await this.generateToken(user);

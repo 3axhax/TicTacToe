@@ -1,6 +1,6 @@
 import { Action, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { RootState } from "../../App/store";
-import Request from "../../Shared/API/Request";
+import Request from "../../Shared/Transport/RestAPI";
 import { USER_LS_KEY } from "./UserConstants";
 import {
   UserAuthorizationType,

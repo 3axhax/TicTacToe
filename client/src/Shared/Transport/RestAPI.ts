@@ -1,13 +1,12 @@
 import axios from "axios";
+import { BASE_URL } from "./constants";
 
-type transport = "axios" | "websocket";
 type method = "GET" | "POST" | "PUT" | "DELETE";
 
-class Request {
-  transport: transport = "axios";
+class RestAPI {
   method: method = "GET";
   target: string = "";
-  baseUrl: string = "http://localhost:5050";
+  baseUrl: string = BASE_URL;
   data: {} = {};
 
   _setTarget = (url: string = "") => {
@@ -16,20 +15,12 @@ class Request {
     }
   };
 
-  // @ts-ignore
   _send = (): Promise<any> => {
-    switch (this.transport) {
-      case "axios":
-        return axios({
-          url: this.baseUrl + this.target,
-          method: this.method,
-          data: this.data,
-        });
-    }
-  };
-
-  xml = () => {
-    this.transport = "axios";
+    return axios({
+      url: this.baseUrl + this.target,
+      method: this.method,
+      data: this.data,
+    });
   };
 
   get = (url: string = "") => {
@@ -45,4 +36,5 @@ class Request {
     return this._send();
   };
 }
-export default new Request();
+
+export default new RestAPI();

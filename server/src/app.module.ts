@@ -9,7 +9,7 @@ import { RolesModule } from "./roles/roles.module";
 import { Role } from "./roles/roles.model";
 import { UserRole } from "./roles/users-roles.model";
 import { AuthModule } from "./auth/auth.module";
-import { WebSocketModule } from "./web-socket/web-socket.module";
+import { GameWebsocketModule } from "./web-socket/GameWebsocket/GameWebsocket.module";
 
 @Module({
   controllers: [AppController],
@@ -31,7 +31,7 @@ import { WebSocketModule } from "./web-socket/web-socket.module";
     UsersModule,
     RolesModule,
     AuthModule,
-    WebSocketModule,
+    GameWebsocketModule,
   ],
 })
 export class AppModule {}

@@ -1,4 +1,4 @@
-.user_menu {
+.userMenu {
   cursor: pointer;
   display: flex;
   flex-wrap: wrap;
@@ -6,7 +6,13 @@
   position: relative;
   min-width: 100px;
 }
-.user_menu__action_list {
+.userName {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0 10px;
+}
+.actionList {
   position: absolute;
   top: 40px;
   width: 100%;

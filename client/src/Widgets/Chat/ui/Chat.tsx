@@ -9,7 +9,6 @@ const Chat: React.FC = () => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    console.log("GamePage Mount");
     Websocket.subscribe({
       url: "/game",
       data: {
@@ -18,7 +17,6 @@ const Chat: React.FC = () => {
       },
     });
     return () => {
-      console.log("GamePage UnMount");
       Websocket.destroy("/game");
     };
   }, []);

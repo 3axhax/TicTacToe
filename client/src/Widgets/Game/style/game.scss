@@ -1,0 +1,89 @@
+$line-width: 6px;
+
+.block {
+  height: 400px;
+  width: 400px;
+  display: flex;
+  flex-wrap: wrap;
+}
+.cell {
+  border: 1px solid $color-grey-tint3;
+  position: relative;
+}
+.usedCell {
+  border: 1px solid $color-grey-tint5;
+}
+.playerCell_1 {
+  background-color: $color-player-1;
+}
+.playerCell_2 {
+  background-color: $color-player-2;
+}
+
+.line {
+  background-color: $color-player-2;
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  border-radius: calc($line-width/2 + 3px);
+}
+.lineExist {
+  opacity: 100%;
+  z-index: 10;
+  cursor: auto;
+  border-radius: 0;
+  background-color: $color-grey-tint7;
+}
+.line:hover:not(.lineExist) {
+  opacity: 30%;
+}
+
+.lineTop,
+.lineBottom {
+  width: 100%;
+  height: calc($line-width + 4px);
+}
+.lineTop {
+  top: - calc($line-width/2 + 3px);
+}
+.lineBottom {
+  bottom: - calc($line-width/2 + 3px);
+}
+
+.lineExist.lineTop,
+.lineExist.lineBottom {
+  width: calc(100% + $line-width);
+  height: $line-width;
+  left: -$line-width/2;
+}
+.lineExist.lineTop {
+  top: - calc($line-width/2 + 1px);
+}
+.lineExist.lineBottom {
+  bottom: - calc($line-width/2 + 1px);
+}
+
+.lineLeft,
+.lineRight {
+  width: calc($line-width + 4px);
+  height: 100%;
+}
+.lineRight {
+  right: - calc($line-width/2 + 3px);
+}
+.lineLeft {
+  left: - calc($line-width/2 + 3px);
+}
+
+.lineExist.lineRight,
+.lineExist.lineLeft {
+  width: $line-width;
+  height: calc(100% + $line-width);
+  top: -$line-width/2;
+}
+.lineExist.lineRight {
+  right: - calc($line-width/2 + 1px);
+}
+.lineExist.lineLeft {
+  left: - calc($line-width/2 + 1px);
+}

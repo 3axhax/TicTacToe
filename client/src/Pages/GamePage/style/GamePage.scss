@@ -3,8 +3,11 @@
 }
 .gameField {
   width: 100%;
-  border: solid 1px $color-grey-tint7;
   padding: 10px;
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+  align-items: center;
 }
 .chat {
   width: 30%;

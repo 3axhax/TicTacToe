@@ -5,7 +5,6 @@ import {
   cellType,
   resetGameMatrix,
   selectFieldsNumberGame,
-  selectGameMatrixGame,
 } from "../../../Entities/Game/GameSlice";
 import GameCell from "./GameCell";
 import { CreateRhombusArray } from "../../../Shared/Helpers/CreateGameField";

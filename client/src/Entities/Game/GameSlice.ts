@@ -2,7 +2,6 @@ import {
   createSlice,
   PayloadAction,
   Slice,
-  SliceCaseReducers,
 } from "@reduxjs/toolkit";
 import { RootState } from "../../App/store";
 import { CreateRhombusArray } from "../../Shared/Helpers/CreateGameField";
@@ -159,7 +158,5 @@ export const selectCellGame = (state: RootState, id: string) => {
   const [i, j] = id.split(":");
   return state.game.gameMatrix[+i][+j];
 };
-
-export const selectGameMatrixGame = (state: RootState) => state.game.gameMatrix;
 
 export default gameSlice.reducer;

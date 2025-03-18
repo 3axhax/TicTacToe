@@ -14,7 +14,7 @@ export const CreateGameField = (rows: number, columns: number): any[] => {
 export const CreateRhombusArray = (size: number): cellType[][] => {
   const matrix = CreateGameField(size, size);
   return matrix.map((row, i) => {
-    return row.map((cell: any, j: number): any => {
+    return row.map((_cell: any, j: number): any => {
       return {
         id: `${i}:${j}`,
         used:

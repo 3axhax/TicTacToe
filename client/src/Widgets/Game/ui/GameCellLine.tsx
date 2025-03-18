@@ -1,6 +1,5 @@
 import React, { FC } from "react";
 import styles from "../Game.module.scss";
-import cn from "classnames";
 import { linesListType } from "../../../Entities/Game/GameSlice";
 
 interface gameCellLineType {

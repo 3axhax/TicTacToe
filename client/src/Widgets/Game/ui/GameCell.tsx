@@ -8,7 +8,6 @@ import {
   selectFieldsNumberGame,
   setGameLine,
 } from "../../../Entities/Game/GameSlice";
-import cn from "classnames";
 import GameCellLine from "./GameCellLine";
 
 interface gameCellType {

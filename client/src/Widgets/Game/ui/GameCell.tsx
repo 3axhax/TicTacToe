@@ -2,13 +2,13 @@ import React, { FC } from "react";
 import styles from "../Game.module.scss";
 import { useAppDispatch, useAppSelector } from "../../../Shared/storeHooks";
 import {
-  cellType,
-  linesListType,
   selectCellGame,
   selectFieldsNumberGame,
   setGameLine,
+  setHoverGameLine,
 } from "../../../Entities/Game/GameSlice";
 import GameCellLine from "./GameCellLine";
+import { cellType, linesListType } from "../../../Shared/Types/GameTypes";
 
 interface gameCellType {
   id: string;
@@ -20,8 +20,16 @@ const GameCell: FC<gameCellType> = ({ id }) => {
 
   const dispatch = useAppDispatch();
 
-  const handlerLineClick = (type: string) => {
+  const handlerLineClick = (type: linesListType) => {
     dispatch(setGameLine({ id: id, type: type }));
+  };
+
+  const handlerMouseOver = (type: linesListType) => {
+    dispatch(setHoverGameLine({ id: id, type: type }));
+  };
+
+  const handlerMouseOut = () => {
+    dispatch(setHoverGameLine({ id: id, type: null }));
   };
 
   const linesList: linesListType[] = ["top", "left", "right", "bottom"];
@@ -40,6 +48,11 @@ const GameCell: FC<gameCellType> = ({ id }) => {
             key={`${id}:${type}Line`}
             type={type}
             onClick={() => handlerLineClick(type)}
+            onMouseOut={handlerMouseOut}
+            onMouseOver={() => handlerMouseOver(type)}
+            hoverPlayer={
+              cell.hoverPlayerLines ? cell.hoverPlayerLines[type] : 0
+            }
             exist={cell.lines && cell.lines.includes(type)}
           />
         ))}

@@ -2,12 +2,12 @@ import React, { useEffect } from "react";
 import styles from "../Game.module.scss";
 import { useAppDispatch, useAppSelector } from "../../../Shared/storeHooks";
 import {
-  cellType,
   resetGameMatrix,
   selectFieldsNumberGame,
 } from "../../../Entities/Game/GameSlice";
 import GameCell from "./GameCell";
-import { CreateRhombusArray } from "../../../Shared/Helpers/CreateGameField";
+import { cellType } from "../../../Shared/Types/GameTypes";
+import { CreateRhombusArray } from "../../../Entities/Game/GameSlice.helpers";
 
 const Game: React.FC = () => {
   const dispatch = useAppDispatch();

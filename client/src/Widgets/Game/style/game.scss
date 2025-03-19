@@ -21,7 +21,6 @@ $line-width: 6px;
 }
 
 .line {
-  background-color: $color-player-2;
   position: absolute;
   opacity: 0;
   cursor: pointer;
@@ -36,6 +35,12 @@ $line-width: 6px;
 }
 .line:hover:not(.lineExist) {
   opacity: 30%;
+}
+.LineHoverPlayer_1 {
+  background-color: $color-player-1;
+}
+.LineHoverPlayer_2 {
+  background-color: $color-player-2;
 }
 
 .lineTop,

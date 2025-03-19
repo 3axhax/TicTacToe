@@ -1,67 +1,44 @@
-import {
-  createSlice,
-  PayloadAction,
-  Slice,
-} from "@reduxjs/toolkit";
+import { createSlice, PayloadAction, Slice } from "@reduxjs/toolkit";
 import { RootState } from "../../App/store";
-import { CreateRhombusArray } from "../../Shared/Helpers/CreateGameField";
 import { INITIAL_FIELDS_NUMBER } from "./GameSlice.constants";
+import {
+  cellType,
+  gameLineType,
+  initialGameStateType,
+  linesListType,
+} from "../../Shared/Types/GameTypes";
+import {
+  checkFillCell,
+  CreateRhombusArray,
+  getCellNeighbour,
+} from "./GameSlice.helpers";
 
-export type linesListType = "top" | "bottom" | "left" | "right";
-
-interface cellNeighbourType {
-  top: boolean;
-  bottom: boolean;
-  left: boolean;
-  right: boolean;
-}
-
-export type cellType = {
-  id: string;
-  used: boolean;
-  lines?: linesListType[];
-  playerCell?: number;
-};
-
-interface initialStateType {
-  fieldsNumber: number;
-  gameMatrix: cellType[][];
-}
-
-const getCellNeighbour = (
-  id: string,
-  matrix: cellType[][],
-): cellNeighbourType => {
-  const [i, j] = id.split(":");
-  return {
-    top: +i > 0 && matrix[+i - 1][+j].used,
-    bottom: matrix[+i + 1] && matrix[+i + 1][+j].used,
-    left: +j > 0 && matrix[+i][+j - 1].used,
-    right: matrix[+i] && matrix[+i][+j + 1] && matrix[+i][+j + 1].used,
-  };
-};
-
-const checkFillCell = (cell: cellType) => {
-  if (cell.lines?.length === 4) {
-    cell.playerCell = 1;
-  }
-};
-
-export const gameSlice: Slice<initialStateType> = createSlice({
+export const gameSlice: Slice<initialGameStateType> = createSlice({
   name: "game",
   initialState: {
     fieldsNumber: INITIAL_FIELDS_NUMBER,
     gameMatrix: CreateRhombusArray(INITIAL_FIELDS_NUMBER),
+    currentPlayerNumber: 1,
   },
   reducers: {
-    setGameLine: (
-      state,
-      action: PayloadAction<{ id: string; type: linesListType }>,
-    ) => {
+    setHoverGameLine: (state, action: PayloadAction<gameLineType>) => {
+      const [i, j] = action.payload.id.split(":");
+      state.gameMatrix[+i][+j].hoverPlayerLines = {
+        top: 0,
+        bottom: 0,
+        left: 0,
+        right: 0,
+      };
+      if (action.payload.type) {
+        state.gameMatrix[+i][+j].hoverPlayerLines[action.payload.type] =
+          state.currentPlayerNumber;
+      }
+    },
+    setGameLine: (state, action: PayloadAction<gameLineType>) => {
       const [i, j] = action.payload.id.split(":");
       if (!state.gameMatrix[+i][+j].lines?.includes(action.payload.type)) {
         state.gameMatrix[+i][+j].lines?.push(action.payload.type);
-        checkFillCell(state.gameMatrix[+i][+j]);
+        checkFillCell(state.gameMatrix[+i][+j], state.currentPlayerNumber);
       }
       switch (action.payload.type) {
         case "top":
@@ -71,7 +48,10 @@ export const gameSlice: Slice<initialStateType> = createSlice({
             !state.gameMatrix[+i - 1][+j].lines?.includes("bottom")
           ) {
             state.gameMatrix[+i - 1][+j].lines?.push("bottom");
-            checkFillCell(state.gameMatrix[+i - 1][+j]);
+            checkFillCell(
+              state.gameMatrix[+i - 1][+j],
+              state.currentPlayerNumber,
+            );
           }
           break;
         case "bottom":
@@ -81,7 +61,10 @@ export const gameSlice: Slice<initialStateType> = createSlice({
             !state.gameMatrix[+i + 1][+j].lines?.includes("top")
           ) {
             state.gameMatrix[+i + 1][+j].lines?.push("top");
-            checkFillCell(state.gameMatrix[+i + 1][+j]);
+            checkFillCell(
+              state.gameMatrix[+i + 1][+j],
+              state.currentPlayerNumber,
+            );
           }
           break;
         case "left":
@@ -91,7 +74,10 @@ export const gameSlice: Slice<initialStateType> = createSlice({
             !state.gameMatrix[+i][+j - 1].lines?.includes("right")
           ) {
             state.gameMatrix[+i][+j - 1].lines?.push("right");
-            checkFillCell(state.gameMatrix[+i][+j - 1]);
+            checkFillCell(
+              state.gameMatrix[+i][+j - 1],
+              state.currentPlayerNumber,
+            );
           }
           break;
         case "right":
@@ -101,7 +87,10 @@ export const gameSlice: Slice<initialStateType> = createSlice({
             !state.gameMatrix[+i][+j + 1].lines?.includes("left")
           ) {
             state.gameMatrix[+i][+j - 1].lines?.push("left");
-            checkFillCell(state.gameMatrix[+i][+j - 1]);
+            checkFillCell(
+              state.gameMatrix[+i][+j - 1],
+              state.currentPlayerNumber,
+            );
           }
           break;
       }
@@ -149,7 +138,8 @@ export const gameSlice: Slice<initialStateType> = createSlice({
   },
 });
 
-export const { resetGameMatrix, setGameLine } = gameSlice.actions;
+export const { resetGameMatrix, setGameLine, setHoverGameLine } =
+  gameSlice.actions;
 
 export const selectFieldsNumberGame = (state: RootState) =>
   state.game.fieldsNumber;

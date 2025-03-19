@@ -1,4 +1,4 @@
-import { cellType } from "../../Entities/Game/GameSlice";
+import { cellNeighbourType, cellType } from "../../Shared/Types/GameTypes";
 
 export const CreateGameField = (rows: number, columns: number): any[] => {
   const arr: any[] = [];
@@ -23,4 +23,23 @@ export const CreateRhombusArray = (size: number): cellType[][] => {
       };
     });
   });
+};
+
+export const getCellNeighbour = (
+  id: string,
+  matrix: cellType[][],
+): cellNeighbourType => {
+  const [i, j] = id.split(":");
+  return {
+    top: +i > 0 && matrix[+i - 1][+j].used,
+    bottom: matrix[+i + 1] && matrix[+i + 1][+j].used,
+    left: +j > 0 && matrix[+i][+j - 1].used,
+    right: matrix[+i] && matrix[+i][+j + 1] && matrix[+i][+j + 1].used,
+  };
+};
+
+export const checkFillCell = (cell: cellType, playerNumber: number) => {
+  if (cell.lines?.length === 4) {
+    cell.playerCell = playerNumber;
+  }
 };

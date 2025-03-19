@@ -1,8 +1,6 @@
 import React, { FC } from "react";
 import styles from "../Game.module.scss";
 import { linesListType } from "../../../Shared/Types/GameTypes";
-import { log } from "node:util";
-import cn from "classnames";
 
 interface gameCellLineType {
   type: linesListType;
@@ -34,7 +32,7 @@ const GameCellLine: FC<gameCellLineType> = ({
 
   return (
     <div
-      className={`${styles.line} ${stylesList[type]} ${exist ? " " + styles.lineExist : ""} ${!exist && hoverPlayer ? styles[`LineHoverPlayer_${hoverPlayer}`] : ""}`}
+      className={`${styles.line} ${stylesList[type]} ${exist ? " " + styles.lineExist : ""} ${!exist && hoverPlayer ? styles["lineHoverPlayer_" + hoverPlayer] + " " + styles.lineHover : ""}`}
       onClick={handlerClick}
       onMouseOver={onMouseOver}
       onMouseOut={onMouseOut}

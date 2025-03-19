@@ -12,6 +12,7 @@ import {
   CreateRhombusArray,
   getCellNeighbour,
 } from "./GameSlice.helpers";
+import Websocket from "../../Shared/Transport/Websocket";
 
 export const gameSlice: Slice<initialGameStateType> = createSlice({
   name: "game",
@@ -95,6 +96,9 @@ export const gameSlice: Slice<initialGameStateType> = createSlice({
           break;
       }
     },
+    setCurrentPlayerNumber: (state, action: PayloadAction<number>) => {
+      state.currentPlayerNumber = action.payload;
+    },
     resetGameMatrix: (state) => {
       const initGameMatrix = CreateRhombusArray(state.fieldsNumber);
       const gameMatrix = initGameMatrix.map((row, i) => {
@@ -135,11 +139,49 @@ export const gameSlice: Slice<initialGameStateType> = createSlice({
       ].lines = ["right"];
       state.gameMatrix = gameMatrix;
     },
+    setGameMatrix: (state, action: PayloadAction<cellType[][]>) => {
+      action.payload.forEach((row: cellType[], i) =>
+        row.forEach((cell, j) => {
+          if (JSON.stringify(cell) !== JSON.stringify(state.gameMatrix[i][j])) {
+            state.gameMatrix[i][j] = cell;
+          }
+        }),
+      );
+      //state.gameMatrix = action.payload;
+    },
+  },
+  extraReducers: (builder) => {
+    builder.addMatcher(
+      (action) => {
+        const [state, reducer] = action.type.split("/");
+        return (
+          state === "game" &&
+          [
+            "resetGameMatrix",
+            "setGameLine",
+            "setHoverGameLine",
+            "setCurrentPlayerNumber",
+          ].includes(reducer)
+        );
+      },
+      (state) => {
+        Websocket.emit({
+          url: "/game",
+          message: "GameMatrix",
+          data: JSON.stringify(state.gameMatrix),
+        });
+      },
+    );
   },
 });
 
-export const { resetGameMatrix, setGameLine, setHoverGameLine } =
-  gameSlice.actions;
+export const {
+  resetGameMatrix,
+  setGameLine,
+  setHoverGameLine,
+  setCurrentPlayerNumber,
+  setGameMatrix,
+} = gameSlice.actions;
 
 export const selectFieldsNumberGame = (state: RootState) =>
   state.game.fieldsNumber;

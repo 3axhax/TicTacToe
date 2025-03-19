@@ -15,7 +15,8 @@ const Chat: React.FC = () => {
         message: "onlineUsersCount",
         cb: (count) => dispatch(setOnlineCount(count)),
       },
-    });
+    }).emit({ url: "/game", message: "onlineUsersCount" });
+
     return () => {
       Websocket.destroy("/game");
     };

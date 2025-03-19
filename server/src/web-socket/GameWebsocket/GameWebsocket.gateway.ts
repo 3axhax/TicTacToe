@@ -21,14 +21,13 @@ export class GameWebsocketGateway
   constructor(private readonly webSocketService: GameWebsocketService) {}
 
   @SubscribeMessage("findAllWebSocket")
-  findAll(@MessageBody() data: any, @ConnectedSocket() client: Socket) {
-    console.log("findAllWebSocket data: ", data);
+  findAll(@ConnectedSocket() client: Socket) {
     client.join("Best");
     return this.webSocketService.findAll();
   }
 
   @SubscribeMessage("test")
-  async test(@MessageBody() data: any, @ConnectedSocket() client: any) {
+  async test() {
     this.server.in("Best").emit("message", "You are the best!!!");
     this.server.emit("test", "test message");
     return "test";
@@ -39,8 +38,20 @@ export class GameWebsocketGateway
     await this.webSocketService.getOnlineUsersCount();
   }
 
+  @SubscribeMessage("GameMatrix")
+  async getGameMatrix(
+    @MessageBody() data: string,
+    @ConnectedSocket() client: Socket,
+  ) {
+    const otherPlayer = (await this.server.fetchSockets()).find(
+      (socket: any) => socket.id !== client.id,
+    );
+    if (otherPlayer) {
+      otherPlayer.emit("updateGameMatrix", JSON.parse(data));
+    }
+  }
+
   afterInit(): void {
-    console.log("WebSocketGateway Init!", this.server);
     this.webSocketService.server = this.server;
   }
 

@@ -4,10 +4,12 @@ import { useAppDispatch, useAppSelector } from "../../../Shared/storeHooks";
 import {
   resetGameMatrix,
   selectFieldsNumberGame,
+  setGameMatrix,
 } from "../../../Entities/Game/GameSlice";
 import GameCell from "./GameCell";
 import { cellType } from "../../../Shared/Types/GameTypes";
 import { CreateRhombusArray } from "../../../Entities/Game/GameSlice.helpers";
+import Websocket from "../../../Shared/Transport/Websocket";
 
 const Game: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -16,10 +18,21 @@ const Game: React.FC = () => {
     dispatch(resetGameMatrix({}));
   }, []);
 
+  useEffect(() => {
+    Websocket.subscribe({
+      url: "/game",
+      data: {
+        message: "updateGameMatrix",
+        cb: (matrix) => {
+          dispatch(setGameMatrix(matrix));
+        },
+      },
+    });
+  }, []);
+
   const grid: cellType[][] = CreateRhombusArray(
     useAppSelector(selectFieldsNumberGame),
   );
-  console.log(grid);
 
   return (
     <div className={styles.block}>

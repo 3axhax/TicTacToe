@@ -1,0 +1,15 @@
+.block {
+  height: 100%;
+  width: 30%;
+  border: solid 1px black;
+}
+.selectBlock {
+  width: 100%;
+  display: flex;
+  gap: 10px;
+  margin: 10px;
+}
+.select {
+  width: 40px;
+  text-align: center;
+}

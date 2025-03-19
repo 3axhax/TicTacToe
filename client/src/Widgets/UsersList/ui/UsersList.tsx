@@ -1,11 +1,11 @@
 import React, { useEffect } from "react";
-import styles from "../Chat.module.scss";
+import styles from "../UsersList.module.scss";
 import MessageList from "../../../Pages/GamePage/ui/MessageList";
 import { useAppDispatch } from "../../../Shared/storeHooks";
 import Websocket from "../../../Shared/Transport/Websocket";
-import { setOnlineCount } from "../../../Entities/Chat/ChatSlice";
+import { setOnlineCount } from "../../../Entities/UsersList/UsersListSlice";
 
-const Chat: React.FC = () => {
+const UsersList: React.FC = () => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -32,4 +32,4 @@ const Chat: React.FC = () => {
   );
 };
 
-export default Chat;
+export default UsersList;

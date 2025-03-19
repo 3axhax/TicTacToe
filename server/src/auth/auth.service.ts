@@ -32,10 +32,6 @@ export class AuthService {
       throw new HttpException("This user exist", HttpStatus.BAD_REQUEST);
     }
 
-    console.log(userDto);
-    console.log("name", userDto.name ? userDto.name : userDto.email);
-    console.log("name bool", !!userDto.name);
-
     const hashPassword = await bcrypt.hash(userDto.password, 5);
     const user = await this.userService.createUser({
       ...userDto,
@@ -50,7 +46,7 @@ export class AuthService {
   }
 
   private async generateToken(user: User) {
-    const payload = { email: user.email, id: user.id, roles: user.roles };
+    const payload = { email: user.email, id: user.id, name: user.name };
     return {
       token: this.jwtService.sign(payload),
     };

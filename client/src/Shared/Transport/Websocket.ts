@@ -1,5 +1,6 @@
 import { io, Socket } from "socket.io-client";
 import { BASE_URL } from "./constants";
+import { USER_LS_KEY } from "../../Entities/User/UserConstants";
 
 interface subscribeDataType {
   message: string;
@@ -48,8 +49,13 @@ const Websocket: WebsocketType = {
 
   _initIO: (url: string) => {
     if (!Websocket.ioList[url]) {
+      const userLS = localStorage.getItem(USER_LS_KEY);
+      const token = userLS ? JSON.parse(userLS) : null;
       Websocket.ioList[url] = io(Websocket.baseUrl + url, {
         transports: ["websocket"],
+        auth: {
+          token: token && token.token ? token.token : null,
+        },
       });
     }
     return Websocket.ioList[url];

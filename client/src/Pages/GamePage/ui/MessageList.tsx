@@ -1,9 +1,9 @@
 import React from "react";
-import { selectOnlineCountChat } from "../../../Entities/Chat/ChatSlice";
 import { useAppSelector } from "../../../Shared/storeHooks";
+import { selectOnlineCountUsersList } from "../../../Entities/UsersList/UsersListSlice";
 
 const MessageList: React.FC = () => {
-  const onlineCount = useAppSelector(selectOnlineCountChat);
+  const onlineCount = useAppSelector(selectOnlineCountUsersList);
   return <div>Online: {onlineCount}</div>;
 };
 

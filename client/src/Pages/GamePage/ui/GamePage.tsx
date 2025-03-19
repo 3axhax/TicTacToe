@@ -1,5 +1,5 @@
 import React from "react";
-import { Chat } from "../../../Widgets/Chat";
+import { UsersList } from "../../../Widgets/UsersList";
 import styles from "../GamePage.module.scss";
 import { Game } from "../../../Widgets/Game";
 import { GameActions } from "../../../Widgets/GameActions";
@@ -14,7 +14,7 @@ const GamePage: React.FC = () => {
           <GameActions />
         </div>
         <div className={styles.chat}>
-          <Chat />
+          <UsersList />
         </div>
       </div>
     </div>

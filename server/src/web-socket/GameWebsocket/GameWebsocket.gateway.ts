@@ -10,6 +10,7 @@ import {
 } from "@nestjs/websockets";
 import { GameWebsocketService } from "./GameWebsocket.service";
 import { Server, Socket } from "socket.io";
+import {GAME_ROOM} from "./GameWebsocket.constants";
 
 @WebSocketGateway({
   namespace: "game",
@@ -18,24 +19,17 @@ export class GameWebsocketGateway
   implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
 {
   @WebSocketServer() server: Server;
+
   constructor(private readonly webSocketService: GameWebsocketService) {}
 
-  @SubscribeMessage("findAllWebSocket")
-  findAll(@ConnectedSocket() client: Socket) {
-    client.join("Best");
-    return this.webSocketService.findAll();
-  }
-
-  @SubscribeMessage("test")
-  async test() {
-    this.server.in("Best").emit("message", "You are the best!!!");
-    this.server.emit("test", "test message");
-    return "test";
-  }
-
   @SubscribeMessage("onlineUsersCount")
-  async getOnlineUsersCount() {
-    await this.webSocketService.getOnlineUsersCount();
+  getOnlineUsersCount() {
+    this.webSocketService.getOnlineUsersCount();
+  }
+
+  @SubscribeMessage("onlineUsersList")
+  getOnlineUsersList() {
+    this.webSocketService.getOnlineUsersList();
   }
 
   @SubscribeMessage("GameMatrix")
@@ -56,13 +50,19 @@ export class GameWebsocketGateway
   }
 
   async handleConnection(client: Socket, ...args: any): Promise<void> {
-    client.join("Game");
+    client.join(GAME_ROOM);
     console.log("WS connection: ", client.id, args);
-    await this.webSocketService.getOnlineUsersCount();
+    this.webSocketService.addUserToUserList(this._getToken(client));
+    this.webSocketService.getOnlineUsersCount();
   }
 
   async handleDisconnect(client: Socket): Promise<void> {
     console.log("WS disconnection: ", client.id);
-    await this.webSocketService.getOnlineUsersCount();
+    this.webSocketService.removeFromUserList(this._getToken(client));
+    this.webSocketService.getOnlineUsersCount();
+  }
+
+  _getToken(client: Socket): string {
+    return client.handshake.auth.token ? client.handshake.auth.token : '';
   }
 }

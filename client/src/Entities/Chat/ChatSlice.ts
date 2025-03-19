@@ -17,8 +17,6 @@ export const chatSlice = createSlice({
 
 export const { setOnlineCount } = chatSlice.actions;
 
-export const selectPendingChat = (state: RootState) => state.chat.pending;
-export const selectErrorChat = (state: RootState) => state.chat.error;
 export const selectOnlineCountChat = (state: RootState) =>
   state.chat.onlineCount;
 

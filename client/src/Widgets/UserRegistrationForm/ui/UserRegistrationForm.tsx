@@ -27,7 +27,7 @@ const UserRegistrationForm: React.FC = () => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    dispatch(resetUserError());
+    dispatch(resetUserError(1));
   }, []);
 
   const pending = useAppSelector(selectPendingAuthorize);

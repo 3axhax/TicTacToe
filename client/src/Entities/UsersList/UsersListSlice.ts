@@ -1,24 +1,32 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction, Slice } from "@reduxjs/toolkit";
 import { RootState } from "../../App/store";
 
-export const usersListSlice = createSlice({
+export interface userType {
+  id: number;
+  name: string;
+  email: string;
+}
+
+export interface usersListInitialType {
+  list: userType[];
+}
+
+export const usersListSlice: Slice<usersListInitialType> = createSlice({
   name: "usersList",
   initialState: {
-    list: {},
-    onlineCount: 0,
+    list: <userType[]>[],
   },
   reducers: {
-    setOnlineCount: (state, action: PayloadAction<number>) => {
-      state.onlineCount = action.payload;
+    setOnlineUserList: (state, action: PayloadAction<userType[]>) => {
+      state.list = action.payload;
     },
   },
 });
 
-export const { setOnlineCount } = usersListSlice.actions;
+export const { setOnlineUserList } = usersListSlice.actions;
 
-export const selectListUsersList = (state: RootState) =>
-  state.usersList.onlineCount;
+export const selectListUsersList = (state: RootState) => state.usersList.list;
 export const selectOnlineCountUsersList = (state: RootState) =>
-  state.usersList.onlineCount;
+  state.usersList.list.length;
 
 export default usersListSlice.reducer;

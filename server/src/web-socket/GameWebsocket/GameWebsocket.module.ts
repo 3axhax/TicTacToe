@@ -1,7 +1,7 @@
-import {Module} from "@nestjs/common";
+import { Module } from "@nestjs/common";
 import { GameWebsocketService } from "./GameWebsocket.service";
 import { GameWebsocketGateway } from "./GameWebsocket.gateway";
-import {JwtModule} from "@nestjs/jwt";
+import { JwtModule } from "@nestjs/jwt";
 
 @Module({
   providers: [GameWebsocketGateway, GameWebsocketService],

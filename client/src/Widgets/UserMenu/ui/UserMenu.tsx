@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../../Shared/storeHooks";
 import {
   logoutUser,
+  selectIsUserAuthorized,
   selectUserName,
-  selectUserToken,
 } from "../../../Entities/User/UserSlice";
 import ArrowDownIcon from "../../../Shared/ui/icons/ArrowDownIcon";
 import cn from "classnames";
@@ -11,13 +11,12 @@ import styles from "../UserMenu.module.scss";
 
 const UserMenu: React.FC = () => {
   const userName = useAppSelector(selectUserName);
-  const token = useAppSelector(selectUserToken);
 
   const dispatch = useAppDispatch();
 
   const [open, setOpen] = useState(false);
 
-  if (!userName || !token) {
+  if (!useAppSelector(selectIsUserAuthorized)) {
     return null;
   }
 
@@ -34,7 +33,7 @@ const UserMenu: React.FC = () => {
         <ul>
           <li
             onClick={() => {
-              dispatch(logoutUser());
+              dispatch(logoutUser(1));
               setOpen(false);
             }}
           >

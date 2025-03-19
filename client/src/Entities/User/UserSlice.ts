@@ -1,22 +1,19 @@
-import { Action, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import {
+  createAsyncThunk,
+  createSlice,
+  PayloadAction,
+  Slice,
+} from "@reduxjs/toolkit";
 import { RootState } from "../../App/store";
-import Request from "../../Shared/Transport/RestAPI";
 import { USER_LS_KEY } from "./UserConstants";
+import { ActionType, userSliceInitialType, userType } from "./UserSlice.types";
+import { saveUser } from "./UserSlice.helpers";
 import {
   UserAuthorizationType,
   userRegistrationType,
 } from "./dto/UserSlice.dto";
+import Request from "../../Shared/Transport/RestAPI";
 import { HandlerAxiosError } from "../../Shared/Helpers/RequestHandlersError";
-
-interface ActionType extends Action {
-  error: { message: string };
-}
-export const updateUserLocalStorage = (key: string, value: string) => {
-  const ls = localStorage.getItem(USER_LS_KEY);
-  const user = ls ? JSON.parse(ls) : {};
-  user[key] = value;
-  localStorage.setItem(USER_LS_KEY, JSON.stringify(user));
-};
 
 export const userAuthorize = createAsyncThunk(
   "user/authorize",
@@ -48,10 +45,12 @@ export const userRegistration = createAsyncThunk(
   },
 );
 
-export const userSlice = createSlice({
+export const userSlice: Slice<userSliceInitialType> = createSlice({
   name: "user",
   initialState: {
+    id: 0,
     name: "",
+    email: "",
     token: "",
     pending: false,
     error: "",
@@ -78,27 +77,27 @@ export const userSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(userAuthorize.fulfilled, (state, action) => {
-        if (action.payload.token) {
-          state.token = action.payload.token;
-          updateUserLocalStorage("token", state.token);
-          state.name = action.payload.name;
-          updateUserLocalStorage("name", state.name);
-        }
-        state.pending = false;
-      })
-      .addCase(userRegistration.fulfilled, (state, action) => {
-        if (action.payload.token) {
-          state.token = action.payload.token;
-          updateUserLocalStorage("token", state.token);
-          state.name = action.payload.name;
-          updateUserLocalStorage("name", state.name);
-        }
-        state.pending = false;
-      })
+      .addCase(
+        userAuthorize.fulfilled,
+        (state, action: PayloadAction<userType>) => {
+          if (action.payload.token) {
+            saveUser(state, action.payload);
+          }
+          state.pending = false;
+        },
+      )
+      .addCase(
+        userRegistration.fulfilled,
+        (state, action: PayloadAction<userType>) => {
+          if (action.payload.token) {
+            saveUser(state, action.payload);
+          }
+          state.pending = false;
+        },
+      )
       .addMatcher(
         (action) => action.type.endsWith("/rejected"),
-        (state, action: ActionType) => {
+        (state, action: PayloadAction<string> & ActionType) => {
           state.pending = false;
           state.error = action.error.message ? action.error.message : "";
         },
@@ -116,7 +115,7 @@ export const userSlice = createSlice({
 export const { logoutUser, checkLSUser, resetUserError } = userSlice.actions;
 
 export const selectUserName = (state: RootState) => state.user.name;
-export const selectUserToken = (state: RootState) => state.user.token;
+export const selectUserID = (state: RootState) => state.user.id;
 export const selectPendingAuthorize = (state: RootState) => state.user.pending;
 export const selectErrorAuthorize = (state: RootState) => state.user.error;
 

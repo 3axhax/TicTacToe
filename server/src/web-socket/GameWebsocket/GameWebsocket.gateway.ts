@@ -10,7 +10,7 @@ import {
 } from "@nestjs/websockets";
 import { GameWebsocketService } from "./GameWebsocket.service";
 import { Server, Socket } from "socket.io";
-import {GAME_ROOM} from "./GameWebsocket.constants";
+import { GAME_ROOM } from "./GameWebsocket.constants";
 
 @WebSocketGateway({
   namespace: "game",
@@ -53,16 +53,16 @@ export class GameWebsocketGateway
     client.join(GAME_ROOM);
     console.log("WS connection: ", client.id, args);
     this.webSocketService.addUserToUserList(this._getToken(client));
-    this.webSocketService.getOnlineUsersCount();
+    this.webSocketService.getOnlineUsersList();
   }
 
   async handleDisconnect(client: Socket): Promise<void> {
     console.log("WS disconnection: ", client.id);
     this.webSocketService.removeFromUserList(this._getToken(client));
-    this.webSocketService.getOnlineUsersCount();
+    this.webSocketService.getOnlineUsersList();
   }
 
   _getToken(client: Socket): string {
-    return client.handshake.auth.token ? client.handshake.auth.token : '';
+    return client.handshake.auth.token ? client.handshake.auth.token : "";
   }
 }

@@ -1,1 +1,1 @@
-export const GAME_ROOM = 'GameRoom';
+export const GAME_ROOM = "GameRoom";

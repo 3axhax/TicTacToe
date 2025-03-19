@@ -1,11 +1,33 @@
 .block {
   height: 100%;
 }
-.messageList {
+.usersListBlock {
   border: solid 1px $color-black;
   border-radius: 10px;
   height: calc(70% - 2px);
 }
+.listCount {
+  margin: 10px;
+  padding-left: 10px;
+  border-bottom: solid 1px $color-grey-tint5;
+}
+.usersList {
+  ul {
+    list-style: none;
+    padding: 0 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    li {
+      display: flex;
+      justify-content: space-between;
+      button {
+        cursor: pointer;
+      }
+    }
+  }
+}
+
 .inputMessage {
   border: solid 1px $color-black;
   border-radius: 10px;

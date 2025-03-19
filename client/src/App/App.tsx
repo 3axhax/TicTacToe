@@ -16,7 +16,7 @@ function App() {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    dispatch(checkLSUser());
+    dispatch(checkLSUser(1));
   }, []);
 
   const isUserAuthorized = useAppSelector(selectIsUserAuthorized);

@@ -1,9 +1,12 @@
 import React, { useEffect } from "react";
 import styles from "../UsersList.module.scss";
-import MessageList from "../../../Pages/GamePage/ui/MessageList";
-import { useAppDispatch } from "../../../Shared/storeHooks";
+import List from "./List";
+import { useAppDispatch, useAppSelector } from "../../../Shared/storeHooks";
 import Websocket from "../../../Shared/Transport/Websocket";
-import { setOnlineCount } from "../../../Entities/UsersList/UsersListSlice";
+import {
+  selectOnlineCountUsersList,
+  setOnlineUserList,
+} from "../../../Entities/UsersList/UsersListSlice";
 
 const UsersList: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -12,20 +15,25 @@ const UsersList: React.FC = () => {
     Websocket.subscribe({
       url: "/game",
       data: {
-        message: "onlineUsersCount",
-        cb: (count) => dispatch(setOnlineCount(count)),
+        message: "onlineUsersList",
+        cb: (usersList: never[]) => {
+          dispatch(setOnlineUserList(usersList));
+        },
       },
-    }).emit({ url: "/game", message: "onlineUsersCount" });
+    }).emit({ url: "/game", message: "onlineUsersList" });
 
     return () => {
       Websocket.destroy("/game");
     };
   }, []);
 
+  const onlineCount = useAppSelector(selectOnlineCountUsersList);
+
   return (
     <div className={styles.block}>
-      <div className={styles.messageList}>
-        <MessageList />
+      <div className={styles.usersListBlock}>
+        <div className={styles.listCount}>Players online: {onlineCount}</div>
+        <List />
       </div>
       <div className={styles.inputMessage}></div>
     </div>

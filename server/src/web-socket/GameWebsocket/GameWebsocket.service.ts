@@ -1,10 +1,9 @@
 import { Injectable } from "@nestjs/common";
 import { WebSocketServer } from "@nestjs/websockets";
 import { Server } from "socket.io";
-import { JwtService } from "@nestjs/jwt";
 import { GAME_ROOM } from "./GameWebsocket.constants";
 
-interface User {
+export interface gameUser {
   id: number;
   email: string;
   name: string;
@@ -14,9 +13,7 @@ interface User {
 export class GameWebsocketService {
   @WebSocketServer() server: Server;
 
-  usersList: User[] = [];
-
-  constructor(private jwtService: JwtService) {}
+  usersList: gameUser[] = [];
 
   getOnlineUsersCount() {
     this.server.in(GAME_ROOM).emit("onlineUsersCount", this.usersList.length);
@@ -26,15 +23,13 @@ export class GameWebsocketService {
     this.server.in(GAME_ROOM).emit("onlineUsersList", this.usersList);
   }
 
-  addUserToUserList(token: string) {
-    const userAdd = this.jwtService.verify(token);
+  addUserToUserList(userAdd: gameUser | null) {
     if (userAdd && !this.usersList.find((user) => user.id === userAdd.id)) {
       this.usersList.push(userAdd);
     }
   }
 
-  removeFromUserList(token: string) {
-    const userRemove = this.jwtService.verify(token);
+  removeFromUserList(userRemove: gameUser | null) {
     if (
       userRemove &&
       this.usersList.find((user) => user.id === userRemove.id)

@@ -68,6 +68,8 @@ export const userSlice: Slice<userSliceInitialType> = createSlice({
         if (user) {
           state.name = user.name;
           state.token = user.token;
+          state.email = user.email;
+          state.id = user.id;
         }
       }
     },

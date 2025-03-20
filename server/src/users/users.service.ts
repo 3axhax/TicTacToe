@@ -31,6 +31,12 @@ export class UsersService {
     });
   }
 
+  async getUserById(id: number) {
+    return await this.userRepository.findOne({
+      where: { id },
+    });
+  }
+
   async updateUser(dto: UpdateUserDto) {
     const { id, ...params } = dto;
     return await this.userRepository.update(params, { where: { id: id } });

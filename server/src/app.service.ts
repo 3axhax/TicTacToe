@@ -22,8 +22,14 @@ export class AppService {
       email: "mail@mail.com",
       password: await bcrypt.hash("test", 5),
     });
-    await this.usersService.updateUser({ id: user.id, name: "Test User" });
-    await this.usersService.addRole({ value: "ADMIN", userId: user.id });
+    await this.usersService.updateUser({
+      id: user.id,
+      name: "Test User",
+    });
+    await this.usersService.addRole({
+      value: "ADMIN",
+      userId: user.id,
+    });
     return "Success";
   }
 }

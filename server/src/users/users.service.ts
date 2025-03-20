@@ -8,7 +8,8 @@ import { AddRoleDto } from "./dto/add-role.dto";
 @Injectable()
 export class UsersService {
   constructor(
-    @InjectModel(User) private userRepository: typeof User,
+    @InjectModel(User)
+    private userRepository: typeof User,
     private roleService: RolesService,
   ) {}
 
@@ -21,7 +22,9 @@ export class UsersService {
   }
 
   async getAllUsers() {
-    return this.userRepository.findAll({ include: { all: true } });
+    return this.userRepository.findAll({
+      include: { all: true },
+    });
   }
 
   async getUserByEmail(email: string) {

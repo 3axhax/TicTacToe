@@ -37,7 +37,7 @@ services:
       context: ./client
       dockerfile: DockerfileClient
     ports:
-      - "1111:1111"
+      - "1111:1112"
     volumes:
       - ./client:/app/client
       - /app/client/node_modules

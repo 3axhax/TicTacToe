@@ -1,6 +1,9 @@
 import { createSlice, PayloadAction, Slice } from "@reduxjs/toolkit";
 import { RootState } from "../../App/store";
-import {INITIAL_FIELDS_NUMBER, WEBSOCKET_GAME_URL} from "./GameSlice.constants";
+import {
+  INITIAL_FIELDS_NUMBER,
+  WEBSOCKET_GAME_URL,
+} from "./GameSlice.constants";
 import {
   cellType,
   gameLineType,

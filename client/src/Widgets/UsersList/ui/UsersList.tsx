@@ -5,9 +5,10 @@ import { useAppDispatch, useAppSelector } from "../../../Shared/storeHooks";
 import Websocket from "../../../Shared/Transport/Websocket";
 import {
   selectOnlineCountUsersList,
-  setOnlineUserList, userType,
+  setOnlineUserList,
+  userType,
 } from "../../../Entities/UsersList/UsersListSlice";
-import {WEBSOCKET_GAME_URL} from "../../../Entities/Game/GameSlice.constants";
+import { WEBSOCKET_GAME_URL } from "../../../Entities/Game/GameSlice.constants";
 
 const UsersList: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -21,16 +22,17 @@ const UsersList: React.FC = () => {
           dispatch(setOnlineUserList(usersList));
         },
       },
-    }).subscribe({
-      url: WEBSOCKET_GAME_URL,
-      data: {
-        message: 'inviteList',
-        cb: (inviteList) => {
-          console.log(inviteList);
-        }
-      }
     })
-        .emit({ url: WEBSOCKET_GAME_URL, message: "onlineUsersList" });
+      .subscribe({
+        url: WEBSOCKET_GAME_URL,
+        data: {
+          message: "inviteList",
+          cb: (inviteList) => {
+            console.log(inviteList);
+          },
+        },
+      })
+      .emit({ url: WEBSOCKET_GAME_URL, message: "onlineUsersList" });
   }, []);
 
   const onlineCount = useAppSelector(selectOnlineCountUsersList);

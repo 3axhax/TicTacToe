@@ -11,7 +11,7 @@ import {
 } from "../Entities/User/UserSlice";
 import { RegistrationPage } from "../Pages/RegistrationPage";
 import GamePage from "../Pages/GamePage/ui/GamePage";
-import {TestPage} from "../Pages/TestPage";
+import { TestPage } from "../Pages/TestPage";
 
 function App() {
   const dispatch = useAppDispatch();

@@ -16,6 +16,9 @@ const MainLayout: React.FC = () => {
             <li>
               <NavLink to="/">Home</NavLink>
             </li>
+            <li>
+              <NavLink to="/test">Test</NavLink>
+            </li>
             {isUserAuthorized ? (
               <>
                 <NavLink to="/game">Game</NavLink>

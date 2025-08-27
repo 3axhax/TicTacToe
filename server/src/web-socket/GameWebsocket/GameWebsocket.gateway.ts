@@ -8,13 +8,17 @@ import {
   WebSocketServer,
   ConnectedSocket,
 } from "@nestjs/websockets";
-import { gameUser, GameWebsocketService } from "./GameWebsocket.service";
+import {gameUser, GameWebsocketService, inviteRequestType} from "./GameWebsocket.service";
 import { Server, Socket } from "socket.io";
 import { GAME_ROOM } from "./GameWebsocket.constants";
 import { UseGuards } from "@nestjs/common";
 import { WebsocketGuard } from "../Websocket.guard";
 import { JwtService } from "@nestjs/jwt";
 import { UsersService } from "../../users/users.service";
+
+export interface GamerClientType {
+  userId: number,
+}
 
 @WebSocketGateway({
   namespace: "game",
@@ -54,17 +58,23 @@ export class GameWebsocketGateway
     }
   }
 
+  @SubscribeMessage("UserInvite")
+  async userInvite(@MessageBody() data: inviteRequestType) {
+    this.webSocketService.createInvite(data);
+  }
+
   afterInit(): void {
     this.webSocketService.server = this.server;
   }
 
-  @UseGuards(WebsocketGuard)
   async handleConnection(client: Socket, ...args: any): Promise<void> {
     client.join(GAME_ROOM);
     console.log("WS connection: ", client.id, args);
-    this.webSocketService.addUserToUserList(
-      await this._getUserFromToken(client),
-    );
+    const user = await this._getUserFromToken(client);
+    if (user) {
+      client.data.userId = user.id;
+    }
+    this.webSocketService.addUserToUserList(user);
     this.webSocketService.getOnlineUsersList();
   }
 

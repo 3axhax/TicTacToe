@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction, Slice } from "@reduxjs/toolkit";
 import { RootState } from "../../App/store";
-import { INITIAL_FIELDS_NUMBER } from "./GameSlice.constants";
+import {INITIAL_FIELDS_NUMBER, WEBSOCKET_GAME_URL} from "./GameSlice.constants";
 import {
   cellType,
   gameLineType,
@@ -166,7 +166,7 @@ export const gameSlice: Slice<initialGameStateType> = createSlice({
       },
       (state) => {
         Websocket.emit({
-          url: "/game",
+          url: WEBSOCKET_GAME_URL,
           message: "GameMatrix",
           data: JSON.stringify(state.gameMatrix),
         });

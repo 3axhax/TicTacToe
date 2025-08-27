@@ -11,6 +11,7 @@ import {
 } from "../Entities/User/UserSlice";
 import { RegistrationPage } from "../Pages/RegistrationPage";
 import GamePage from "../Pages/GamePage/ui/GamePage";
+import {TestPage} from "../Pages/TestPage";
 
 function App() {
   const dispatch = useAppDispatch();
@@ -25,6 +26,7 @@ function App() {
     <Routes>
       <Route path="/" element={<MainLayout />}>
         <Route index element={<HomePage />} />
+        <Route path="/test" element={<TestPage />} />
         {isUserAuthorized ? (
           <>
             <Route path="/game" element={<GamePage />} />
